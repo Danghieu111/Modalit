@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "minify": "terser main.js -o main.min.js && csso style.css -o style.min.css"
+  },
+  "dependencies": {
+    "csso-cli": "^4.0.2",
+    "terser": "^5.47.1"
+  }
+}
