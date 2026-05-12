@@ -26,19 +26,21 @@
     background: #fff;
     width: min(500px, 90%);
     border-radius: 10px;
-    padding: 30px 30px 0px 30px;
+    padding: 20px;
     transform: scale(0);
     transition: transform 0.3s;
 
 }
 
-.modal-footer {
-    padding: 10px 0px;
+.modalit__footer {
+    padding-top: 10px;
     display: flex;
     justify-content: flex-end;
     gap: 10px;
 }
 .modalit__close { 
+    outline: none;
+    border: none;
     position: absolute;
     top: 10px;
     right: 10px;
@@ -62,6 +64,6 @@
 
 
 
-.no-scroll {
+.modalit--no-scroll {
     overflow: hidden;
 }

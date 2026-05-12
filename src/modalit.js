@@ -1,22 +1,41 @@
 function Modalit(option= {}) {
+    if (!option.content && !option.templateId) { 
+        console.error("You must provide on of 'content' or 'templateId'.")
+        return 
+    }
+
+    if (option.content && option.templateId) {
+        option.templateId = null
+    }
+
+    if (option.templateId) {
+        this.teamplate = document.querySelector(`#${option.templateId}`)
+
+        if (!this.teamplate) {
+            console.error(`${this.otp.templateId} does not exist`)
+        }
+    }
+
     this.otp = { 
         destroyOnClose : true,
         classContent : [],
         closeMethod : ['button', 'overlay', 'escape'],
+        enableScrolLock : true,
+        scrollLockTarget: () => document.scrollingElement,
         footer : false,
         ...option
     }
 
     this._escapeHandle = this._escapeHandle.bind(this)
-    this.teamplate = document.querySelector(this.otp.templateId)
+    this.content = this.otp.content
 
-    if (!this.teamplate) { return }
 
     this._allowButtonClose = this.otp.closeMethod.includes('button')
     this._allowOverlayClose = this.otp.closeMethod.includes('overlay') 
     this._allowEscapeClose = this.otp.closeMethod.includes('escape')
     this._footerButtons = [] 
 }
+
 
 Modalit.prototype._onTranstionEnd = function(callback) {
     this._backdrop.ontransitionend = (e) => {
@@ -26,10 +45,14 @@ Modalit.prototype._onTranstionEnd = function(callback) {
 }
 
 Modalit.prototype._escapeHandle = function(e) {
-    const lastModal = Modalit.openModels[Modalit.openModels.length - 1]
+    const lastModal = Modalit.openModals[Modalit.openModals.length - 1]
     if (e.key == 'Escape' && this === lastModal) {
         this.close()
     } 
+}
+
+Modalit.prototype._hasScrollbar = (target) => {
+    return target.scrollHeight > target.clientHeight
 }
 
 Modalit.prototype.open = function() {
@@ -37,8 +60,14 @@ Modalit.prototype.open = function() {
         this._build()
     }
 
-    document.body.classList.add('modalit--no-scroll')
-    document.body.style.paddingRight = this._getScrollBarWidth() + 'px'
+    if (this.otp.enableScrolLock) {
+        const target = this.otp.scrollLockTarget()
+        if (this._hasScrollbar(target)) {
+            target.classList.add('modalit--no-scroll')
+            target.style.paddingRight = this._getScrollBarWidth() + parseInt(getComputedStyle(target).paddingRight) + 'px'
+        }
+    }
+
 
     setTimeout(() => {
         this._backdrop.classList.add('modalit--show')
@@ -56,7 +85,7 @@ if (this._allowEscapeClose) {
     document.addEventListener('keydown', this._escapeHandle) 
 }
 
-    Modalit.openModels.push(this)
+    Modalit.openModals.push(this)
 
     this._onTranstionEnd(() => {
         if (typeof this.otp.onOpen === 'function') this.otp.onOpen()
@@ -97,8 +126,8 @@ Modalit.prototype.setFooterContent = function(html) {
 }
 
 Modalit.prototype.close = function(destroy = this.otp.destroyOnClose) { 
-    this._backdrop.classList.remove('show')  
-    Modalit.openModels.pop()
+    this._backdrop.classList.remove('modalit--show')  
+    Modalit.openModals.pop()
     if (this._allowEscapeClose) {
         document.removeEventListener('keydown', this._escapeHandle) 
     }
@@ -110,19 +139,27 @@ Modalit.prototype.close = function(destroy = this.otp.destroyOnClose) {
                 this._modalFooter = null
             }
 
-            if (Modalit.openModels.length == 0) {
-                document.body.classList.remove('modalit--no-scroll')
-                document.body.style.paddingRight = ''
+            if (Modalit.openModals.length == 0 && this.otp.enableScrolLock) {
+                const target = this.otp.scrollLockTarget()
+                if (this._hasScrollbar(target)) {
+                    target.classList.remove('modalit--no-scroll')
+                    target.style.paddingRight = ''
+                }
             }
             if (typeof this.otp.onClose === 'function') this.otp.onClose()
         })
 }
 
 Modalit.prototype._build = function() {
-    const content = this.teamplate.content.cloneNode(true)
+    const contentNode = this.content ? document.createElement('div') : this.teamplate.content.cloneNode(true)
+
+    if (this.content) {
+        contentNode.innerHTML = this.content
+    }
+
     this._backdrop = document.createElement('div')
     this._backdrop.className = 'modalit'
-    this._backdrop.style.zIndex = 1000 + Modalit.openModels.length
+    this._backdrop.style.zIndex = 1000 + Modalit.openModals.length
 
     const container = document.createElement('div')
     container.className = 'modalit__container'
@@ -138,12 +175,12 @@ Modalit.prototype._build = function() {
         container.append(button)
     }
 
-    const modalContent = document.createElement('div')
-    modalContent.className = 'modalit__content'
-    modalContent.append(content)
+    this._modalContent = document.createElement('div')
+    this._modalContent.className = 'modalit__content'
+    this._modalContent.append(contentNode)
 
     this._backdrop.append(container)
-    container.append(modalContent)
+    container.append(this._modalContent)
     document.body.append(this._backdrop)
 
     if (this.otp.footer) {
@@ -157,6 +194,14 @@ Modalit.prototype._build = function() {
             this._modalFooter.append(button)
         })
         container.append(this._modalFooter)
+    }
+}
+
+Modalit.prototype.setContent = function(content) {
+    this.content = content
+
+    if(this._modalContent) {
+        this._modalContent.innerHTML = this.content
     }
 }
 
@@ -178,4 +223,4 @@ Modalit.prototype._getScrollBarWidth = function() {
     return this._scrollBarWidth
 }
 
-Modalit.openModels = []
+Modalit.openModals = []
