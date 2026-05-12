@@ -37,11 +37,11 @@ Modalit.prototype.open = function() {
         this._build()
     }
 
-    document.body.classList.add('no-scroll')
+    document.body.classList.add('modalit--no-scroll')
     document.body.style.paddingRight = this._getScrollBarWidth() + 'px'
 
     setTimeout(() => {
-        this._backdrop.classList.add('show')
+        this._backdrop.classList.add('modalit--show')
     },0)
 
     this._backdrop.onclick = (e) => {
@@ -111,7 +111,7 @@ Modalit.prototype.close = function(destroy = this.otp.destroyOnClose) {
             }
 
             if (Modalit.openModels.length == 0) {
-                document.body.classList.remove('no-scroll')
+                document.body.classList.remove('modalit--no-scroll')
                 document.body.style.paddingRight = ''
             }
             if (typeof this.otp.onClose === 'function') this.otp.onClose()
@@ -121,25 +121,25 @@ Modalit.prototype.close = function(destroy = this.otp.destroyOnClose) {
 Modalit.prototype._build = function() {
     const content = this.teamplate.content.cloneNode(true)
     this._backdrop = document.createElement('div')
-    this._backdrop.className = 'modal-backdrop'
+    this._backdrop.className = 'modalit'
     this._backdrop.style.zIndex = 1000 + Modalit.openModels.length
 
     const container = document.createElement('div')
-    container.className = 'modal-container'
+    container.className = 'modalit__container'
 
     this.otp.classContent.forEach((className) => {
         container.classList.add(className)
     });
 
     if (this._allowButtonClose) {
-        const button = this._createButton('&times;', 'modal-close', () => {
+        const button = this._createButton('&times;', 'modalit__close', () => {
             this.close()
         })
         container.append(button)
     }
 
     const modalContent = document.createElement('div')
-    modalContent.className = 'modal-content'
+    modalContent.className = 'modalit__content'
     modalContent.append(content)
 
     this._backdrop.append(container)
@@ -148,7 +148,7 @@ Modalit.prototype._build = function() {
 
     if (this.otp.footer) {
         this._modalFooter = document.createElement('div')
-        this._modalFooter.className = 'modal-footer'
+        this._modalFooter.className = 'modalit__footer'
         if (this._footerContent) {
             this._modalFooter.innerHTML = this._footerContent
         }

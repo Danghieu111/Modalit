@@ -1,4 +1,4 @@
-.modal-backdrop {
+.modalit {
     background: rgba(0, 0, 0, 0.6);
     position: fixed;
     display: flex;
@@ -10,7 +10,18 @@
     transition: opacity, visibility ;
     transition-duration: 0.3s ;
 }
-.modal-container {
+
+.modalit--show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modalit--show .modalit__container {
+    transform: scale(1);
+}
+
+
+.modalit__container {
     position: relative;
     background: #fff;
     width: min(500px, 90%);
@@ -27,7 +38,7 @@
     justify-content: flex-end;
     gap: 10px;
 }
-.modal-close { 
+.modalit__close { 
     position: absolute;
     top: 10px;
     right: 10px;
@@ -38,19 +49,18 @@
     color: #666;
     font-size: 1.5rem;
 }
-.modal-content {
+
+.modalit__close:hover {
+    color: #333;
+    cursor: pointer;
+}
+
+.modalit__content {
     max-height: 80vh;
     overflow-y: auto;
 }
 
-.modal-backdrop.show {
-    opacity: 1;
-    visibility: visible;
-}
 
-.modal-backdrop.show .modal-container {
-    transform: scale(1);
-}
 
 .no-scroll {
     overflow: hidden;
