@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "minify": "terser main.js -o main.min.js && csso style.css -o style.min.css"
+    "minify": "terser src/modalit.js -o src/modalit.min.js && csso src/modalit.css -o modalit.min.css"
   },
   "dependencies": {
     "csso-cli": "^4.0.2",

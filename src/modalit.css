@@ -24,7 +24,7 @@
 .modalit__container {
     position: relative;
     background: #fff;
-    width: min(500px, 90%);
+    width: min(600px, 90%);
     border-radius: 10px;
     padding: 20px;
     transform: scale(0);

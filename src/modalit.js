@@ -60,10 +60,11 @@ Modalit.prototype.open = function() {
         this._build()
     }
 
-    if (this.otp.enableScrolLock) {
+    if (this.otp.enableScrolLock && !Modalit.openModals.length) {
         const target = this.otp.scrollLockTarget()
         if (this._hasScrollbar(target)) {
             target.classList.add('modalit--no-scroll')
+            console.log(Modalit.openModals)
             target.style.paddingRight = this._getScrollBarWidth() + parseInt(getComputedStyle(target).paddingRight) + 'px'
         }
     }

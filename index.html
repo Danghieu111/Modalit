@@ -441,6 +441,17 @@
             <h1>Template Modal 1</h1>
         </template>
 
+        <template id="modal-3">
+            <h1>Template Modal 3</h1>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Possimus, sequi! Voluptatum magnam ut doloribus autem, suscipit iste debitis reprehenderit explicabo corporis, quis fuga libero ab ullam quos dolor ratione tempora!
+            Explicabo commodi, repudiandae eos, et quia obcaecati, molestias earum voluptate odio sed quasi? Quaerat perspiciatis cumque ipsum ea soluta ut eos corporis distinctio itaque minima eaque totam nemo, enim quae.
+            Ratione dolorem labore quos incidunt placeat, officiis sint repellat dignissimos, iste, at unde ducimus non quia repellendus? Cum laudantium fuga vero quidem cumque dolores illum est, aliquam ea adipisci iure.
+            Illo, praesentium nobis iste culpa fugiat enim? Praesentium enim quo esse ab illum. Sunt laboriosam distinctio temporibus aliquam quis possimus doloribus facere. Dolorum nisi repellat totam eum nemo repellendus ipsa?
+            Non optio quasi, labore dolorum veniam enim in dolores modi doloremque omnis reprehenderit? Laudantium quos quidem, debitis unde repellat mollitia eos libero, dolor obcaecati vero distinctio ipsam id at dolorem?
+            Sit iure officia perferendis quidem illum ipsam dolores assumenda similique atque, rem, aliquam nemo adipisci. Eaque quam fugiat ipsam error maiores porro praesentium minima expedita quia molestiae ipsa, quas accusantium!
+            Dicta reprehenderit pariatur consequatur placeat, perferendis beatae omnis nobis non sit dolorem autem illum eaque. Beatae ex velit officia illo porro repellendus, ea non, iusto sint vitae quidem ad quisquam.
+            Atque eius cupiditate adipisci, asperiores soluta tempore, doloremque quam eum dolores aut earum! Libero unde sint dolores necessitatibus placeat. Rerum ad quasi quis nulla distinctio aut placeat officia quaerat omnis.</p>
+        </template>
 
         <script src="./assets/highlight/highlight.js"></script>
         <script src="./src/modalit.js"></script>
@@ -448,11 +459,10 @@
             // Highlight code
             hljs.initHighlightingOnLoad();
 
-            // Modalit
+            // Modalit 
             const buttonModal1 = document.querySelector('.js-modalit-modal-1')
             
             const modal1 = new Modalit({
-                footer: true,
                 templateId: "modal-1",
                 content: `
                     <h1>Basic Modal</h1>
@@ -463,6 +473,112 @@
 
             buttonModal1.onclick = () => {
                 modal1.open()
+            }
+
+            // Modal with button
+
+            const buttonModal2 = document.querySelector('.js-modalit-modal-2')
+            
+            const modal2 = new Modalit({
+                footer: true,
+                templateId: "modal-1",
+                content: `
+                    <h1>Basic Modal</h1>
+                    <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus earum accusamus nihil ipsam inventore, quasi cum id, magni et ea placeat vel ullam unde ipsa, rerum fugit quae autem possimus.</p>
+                `
+            })
+
+            modal2.addFooterButton('Cancel', 'modal-btn', () => {
+                modal2.close()
+            })
+
+            modal2.addFooterButton('Comfirm', 'modal-btn primary', () => {
+                console.log('Confirm...')
+                modal2.close()
+            })
+
+
+            buttonModal2.onclick = () => {
+                modal2.open()
+            }
+
+
+            // Modal with large content
+
+            const buttonModal3 = document.querySelector('.js-modalit-modal-3')
+            
+            const modal3 = new Modalit({
+                footer: true,
+                templateId: "modal-3",
+            })
+
+            buttonModal3.onclick = () => {
+                modal3.open()
+            }
+
+            // Modal with Only footer close
+
+            const buttonModal4 = document.querySelector('.js-modalit-modal-4')
+            
+            const modal4 = new Modalit({
+                footer: true,
+                templateId: "modal-1",
+                closeMethod: []
+            })
+
+            buttonModal4.onclick = () => {
+                modal4.open()
+            }
+
+            modal4.addFooterButton('Close', 'modal-btn', () => {
+                modal4.close()
+            })
+
+            // Fersistent Modal
+            const buttonModal5 = document.querySelector('.js-modalit-modal-5')
+            
+            const modal5 = new Modalit({
+                footer: true,
+                templateId: "modal-3",
+                destroyOnClose: false
+            })
+
+            buttonModal5.onclick = () => {
+                modal5.open()
+            }
+
+            // Multiple Modals
+            const buttonModal6 = document.querySelector('.js-modalit-modal-6')
+            
+            const modal6 = new Modalit({
+                footer: true,
+                content: `
+                    <h1>Basic Modal</h1>
+                    <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus earum accusamus nihil ipsam inventore, quasi cum id, magni et ea placeat vel ullam unde ipsa, rerum fugit quae autem possimus.</p>
+                    <button class="btn" onclick="modal1.open()">Open Basic Modal</button>
+                `,
+                destroyOnClose: false
+            })
+
+            buttonModal6.onclick = () => {
+                modal6.open()
+            }
+
+            // Youtube Embed Modal
+            const buttonModal7 = document.querySelector('.js-modalit-modal-7')
+            
+            const modal7 = new Modalit({
+                content: `
+                <iframe width="560" height="315" 
+                src="https://www.youtube.com/embed/PsVEpKthrcg?si=wXhmMoo3cHqOxvG-" title="YouTube video player" 
+                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                </iframe>`,
+                destroyOnClose: false
+            })
+
+            buttonModal7.onclick = () => {
+                modal7.open()
             }
 
         </script>
